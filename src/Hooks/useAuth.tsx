@@ -7,11 +7,20 @@ interface AuthContextData {
     nome: string
     handleLogin: (email: string, password: string) => void
     handleLogoff: () => void
+    handleRegistration: (name: string, email: string, password: string, confirmationPassword: string) => void
     token: string
+    history: any
 }
 
 interface AuthProviderProps {
     children: React.ReactNode
+}
+
+interface RegistrationData {
+    name: string
+    email: string
+    password: string
+    confirmationPassword: string
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -23,6 +32,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     
     const history = useHistory();
     let api = ApiService
+
     useEffect(function () {
         api.get('/csrf-cookie')
     },[])
@@ -36,6 +46,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
                 if (response.status == 200) {
                     setAutenticado(true)
                     setNome(response.data.nome)
+                    localStorage.setItem("s_acc", response.data.token.toString())
                     setToken(response.data.token.toString())
                     history.push("/chamados/ti", {
                         from: '/entrar',
@@ -43,6 +54,24 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
                 }
         })
 
+    }
+
+    async function handleRegistration(name: string, email: string, password: string, confirmationPassword: string)
+    {
+        await api.post("/register", 
+            {name, email, password, confirmationPassword},
+            { withCredentials: true}
+        ).then(response => {
+            if (response.status == 200) {
+                setAutenticado(true)
+                setNome(response.data.nome)
+                localStorage.setItem("s_acc", response.data.token.toString())
+                setToken(response.data.token.toString())
+                history.push("/chamados/ti", {
+                    from: '/entrar',
+                    } as { from: string })
+            }
+    })
     }
 
     async function handleLogoff() 
@@ -60,7 +89,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{autenticado, nome, token, handleLogin, handleLogoff}}>
+        <AuthContext.Provider value={{autenticado, nome, token, handleLogin, handleLogoff, history, handleRegistration}}>
             { children }
         </AuthContext.Provider>
     )

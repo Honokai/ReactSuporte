@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -20,7 +19,7 @@ export default function Tabela(props: TabelaProps) {
       <Table  aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Chamado #</TableCell>
+            <TableCell sx={{fontWeight: "bolder"}}>Chamado #</TableCell>
             <TableCell align="left">Solicitante</TableCell>
             <TableCell align="left">Setor</TableCell>
             <TableCell align="left">Abertura</TableCell>

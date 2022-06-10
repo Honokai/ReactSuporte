@@ -47,6 +47,7 @@ interface ModalFrameProps {
 
 function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProps) {
     const {aberto, handleModal, setModalData} = useModal()
+    const [allowed, setAllowed] = React.useState<boolean>(false)
     const { token, nome } = useAuth()
     const [solicitacao, setSolicitacao] = React.useState<string>('');
     const [localizacao, setLocalizacao] = React.useState<number>();
@@ -83,7 +84,13 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
         setSetor(0)
         setCategoria(0)
         recursos()
+        podeAlterar()
     }, [data])
+
+    function podeAlterar()
+    {
+        data?.solicitante === nome ? setAllowed(true) : setAllowed(false)
+    }
     
     const handleResposta = () => {
         api.post("/respostas", {
@@ -134,7 +141,6 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                             <FormControl fullWidth margin='dense' >
                                 <InputLabel id="localizacao-label">Localização</InputLabel>
                                 <Select
-                                    sx={{color: 'white'}}
                                     size='small'
                                     labelId="localizacao-label"
                                     id="localizacao"
@@ -153,7 +159,6 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                             <FormControl fullWidth margin='dense' >
                                 <InputLabel id="setor-select">Setor</InputLabel>
                                 <Select
-                                    sx={{color: 'white'}}
                                     size='small'
                                     labelId="setor-select"
                                     id="setor"
@@ -173,7 +178,6 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                             <FormControl fullWidth margin='dense' >
                                 <InputLabel id="categoria-select">Categoria</InputLabel>
                                 <Select
-                                    sx={{color: 'white'}}
                                     size='small'
                                     labelId="categoria-select"
                                     id="categoria"
@@ -193,7 +197,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                     </Grid>
                     <Grid item xs={8}>
                         {
-                            data ? (
+                            data && allowed ? (
                                 <Box sx={{margin: "0.8rem 0 0rem 0"}}>
                                     <TextField
                                         fullWidth
@@ -238,7 +242,6 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                     </>
                                 ) : (
                                     <TextField
-                                        sx={{textarea: {color: 'white'}}}
                                         fullWidth
                                         id="filled-multiline-flexible"
                                         label="Solicitação"
