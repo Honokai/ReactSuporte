@@ -97,7 +97,9 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
             chamado: data?.id,
             solicitacao
         }, { headers }).then(response => {
-
+            if (response.status == 200) {
+                console.log(response.data)
+            }
         })
     }
 
