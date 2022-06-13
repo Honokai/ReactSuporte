@@ -49,10 +49,10 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
     const [allowed, setAllowed] = React.useState<boolean>(false)
     const { token, nome } = useAuth()
     const [solicitacao, setSolicitacao] = React.useState<string>('');
-    const [localizacao, setLocalizacao] = React.useState<number>();
+    const [localizacao, setLocalizacao] = React.useState<number|string>('');
     const [localizacoes, setLocalizacoes] = React.useState<{id: string, identificacao: string}[]|null>();
-    const [setor, setSetor] = React.useState<number>(0);
-    const [categoria, setCategoria] = React.useState<number>();
+    const [setor, setSetor] = React.useState<number|string>('');
+    const [categoria, setCategoria] = React.useState<number|string>('');
     const [subcategorias, setSubCategorias] = React.useState<{id: string, nome: string, categoria_id: number}[]>();
     const [setores, setSetores] = React.useState<{id: string, nome: string}[]|null>();
     
@@ -80,9 +80,9 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
 
     React.useEffect( () => {
         setSolicitacao('')
-        setLocalizacao(0)
-        setSetor(0)
-        setCategoria(0)
+        setLocalizacao('')
+        setSetor('')
+        setCategoria('')
         recursos()
         podeAlterar()
     }, [data])
@@ -97,8 +97,10 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
             chamado: data?.id,
             solicitacao
         }, { headers }).then(response => {
-            if (response.status === 200) {
-                console.log(response.data)
+            if (response.status === 201) {
+                handleModal(false) 
+                setModalData(null)
+                atualizar()
             }
         })
     }

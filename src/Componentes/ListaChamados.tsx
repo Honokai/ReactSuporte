@@ -65,6 +65,7 @@ function ListaChamados() {
             Authorization: `Bearer ${token}`
         }}).then(response => {
             let paginas = response.data.meta.last_page
+            console.log(response.data.data)
             setChamados(response.data.data)
             setPaginas(paginas)
         })

@@ -8,6 +8,7 @@ interface AuthContextData {
     handleLogin: (email: string, password: string) => void
     handleLogoff: () => void
     handleRegistration: (name: string, email: string, password: string, confirmationPassword: string) => void
+    validationError: string
     token: string
     history: any
 }
@@ -29,6 +30,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     const [ autenticado, setAutenticado ] = useState<boolean>(false)
     const [ nome, setNome ] = useState<string>("")
     const [ token, setToken ] = useState<string>("")
+    const [ validationError, setValidationError ] = useState('')
     
     const history = useHistory();
     let api = ApiService
@@ -44,6 +46,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
                 password
             }, { withCredentials: true}).then(response => {
                 if (response.status == 200) {
+                    setValidationError("")
                     setAutenticado(true)
                     setNome(response.data.nome)
                     localStorage.setItem("s_acc", response.data.token.toString())
@@ -51,6 +54,8 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
                     history.push("/chamados/ti", {
                         from: '/entrar',
                         } as { from: string })
+                } else {
+                    setValidationError(response.data.mensagem)
                 }
         })
 
@@ -89,7 +94,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{autenticado, nome, token, handleLogin, handleLogoff, history, handleRegistration}}>
+        <AuthContext.Provider value={{autenticado, nome, token, handleLogin, handleLogoff, history, handleRegistration, validationError}}>
             { children }
         </AuthContext.Provider>
     )

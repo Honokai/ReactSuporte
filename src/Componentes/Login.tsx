@@ -1,22 +1,25 @@
-import { Button, Container, Link, Paper, TextField, Typography } from "@mui/material"
+import { Alert, Button, Container, Link, Paper, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { useState } from "react"
 import { useAuth } from "../Hooks/useAuth"
 import Conteudo from "./Conteudo"
-import { useHistory } from 'react-router-dom';
 
 
 const Login = () => {
     const [ email, setEmail ] = useState<string>("")
     const [ password, setPassword ] = useState<string>("")
-    const { handleLogin, history } = useAuth()
+    const { handleLogin, history, validationError } = useAuth()
 
     return (
         <Conteudo>
             <Container maxWidth="sm" sx={{height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-                    <Paper sx={{padding: "4rem"}}>
+                    <Paper sx={{padding: "4rem", maxWidth: 'inherit'}}>
                         <Typography variant="h5">Entre com sua conta</Typography>
-                        
+                        {validationError ? (
+                            <Alert severity="warning">
+                                {validationError}
+                            </Alert>
+                        ) : ""}
                         <Box component="form" sx={{"& *": {padding: "0.3rem"}}}>
                             <div>
                                 <TextField id="nome" onChange={(event) => setEmail(event.target.value) } label="Nome" variant="standard" />

@@ -26,7 +26,6 @@ export function ModalContextProvider({children} : ModalContextProviderProps) {
         await ApiService.get(`http://api.teste.com/api/chamado/${id}`, { headers: {
             Authorization: `Bearer ${token}`
         }}).then(response => {
-            console.log(response.data)
             setModalData(response.data.data)
         }).catch(e => console.log(e))
     }

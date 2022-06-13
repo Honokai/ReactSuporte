@@ -16,13 +16,14 @@ export default function Tabela(props: TabelaProps) {
   const {handleModal} = useModal()
   return (
     <TableContainer component={Paper}>
-      <Table  aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{fontWeight: "bolder"}}>Chamado #</TableCell>
+            <TableCell align="left">Status</TableCell>
             <TableCell align="left">Solicitante</TableCell>
             <TableCell align="left">Setor</TableCell>
-            <TableCell align="left">Abertura</TableCell>
+            <TableCell align="left">Abertura </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -34,6 +35,9 @@ export default function Tabela(props: TabelaProps) {
             >
               <TableCell component="th" scope="row">
                 #{row.id.toString()}/{new Date(row.created_at).getFullYear()}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {row.status}
               </TableCell>
               <TableCell component="th" scope="row">
                 {row.solicitante}
