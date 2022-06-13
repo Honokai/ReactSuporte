@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
 import { chamadoProps } from './ListaChamados';
-import axios from 'axios';
 import { useModal } from '../Hooks/useModal';
 import { ApiService } from '../Services/Api';
 import { useAuth } from '../Hooks/useAuth';
@@ -61,7 +60,8 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
 
     let api = ApiService
     
-    const recursos = async () => {
+    async function recursos ()
+    {
         await api.get(`/subcategorias`, {headers})
         .then(response => {
             setSubCategorias(response.data)
@@ -97,7 +97,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
             chamado: data?.id,
             solicitacao
         }, { headers }).then(response => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 console.log(response.data)
             }
         })
@@ -110,7 +110,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
             subcategoria_id: categoria,
             setorOrigem_id: setor
         }, {headers, withCredentials: true}).then(response => {
-            if (response.status == 201 ) {
+            if (response.status === 201 ) {
                 handleModal(false) 
                 setModalData(null)
                 atualizar()

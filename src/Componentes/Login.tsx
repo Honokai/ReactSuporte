@@ -10,6 +10,7 @@ const Login = () => {
     const [ email, setEmail ] = useState<string>("")
     const [ password, setPassword ] = useState<string>("")
     const { handleLogin, history } = useAuth()
+
     return (
         <Conteudo>
             <Container maxWidth="sm" sx={{height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
@@ -24,7 +25,12 @@ const Login = () => {
                                 <TextField type="password" onChange={(event) => setPassword(event.target.value) } id="senha" label="Senha" variant="standard" />
                             </div>
                             <div>
-                                <Link href="/registrar">
+                                <Link onClick={() => {
+                                    history.push("/registrar", {
+                                        from: '/entrar',
+                                        } as { from: string })
+                                    }}
+                                >
                                     Não tem conta? Crie uma.
                                 </Link>
                             </div>
