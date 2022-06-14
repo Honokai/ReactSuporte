@@ -1,12 +1,10 @@
 import { Pagination } from "@mui/material"
 import { Box } from "@mui/system"
-import axios from "axios"
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { useAuth } from "../Hooks/useAuth"
 import { useModal } from "../Hooks/useModal"
 import { ApiService } from "../Services/Api"
-import CardChamado from "./CardChamado"
 import Conteudo from "./Conteudo"
 import ModalFrame from "./ModalFrame"
 import Tabela from "./Tabela"
@@ -64,10 +62,8 @@ function ListaChamados() {
         ApiService.get(url, { headers: {
             Authorization: `Bearer ${token}`
         }}).then(response => {
-            let paginas = response.data.meta.last_page
-            console.log(response.data.data)
             setChamados(response.data.data)
-            setPaginas(paginas)
+            setPaginas(response.data.meta.last_page)
         })
         .catch(error => console.log(error))
     }
