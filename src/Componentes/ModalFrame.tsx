@@ -220,7 +220,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                 return (
                                     <Box sx={{margin: "0.8rem 0 0rem 0"}}>
                                         <Paper sx={{p: "1rem"}}>
-                                            <Grid sx={{whiteSpace: "pre"}} justifyContent="left" item xs zeroMinWidth>
+                                            <Grid sx={{whiteSpace: "pre-wrap"}} item xs zeroMinWidth>
                                                 {resposta.conteudo}
                                             </Grid>
                                         </Paper>
@@ -236,7 +236,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                 data?.solicitacao ? (
                                     <>
                                         <Paper sx={{p: "1rem"}}>
-                                                <Grid sx={{whiteSpace: "pre"}} justifyContent="left" item xs zeroMinWidth>
+                                                <Grid sx={{whiteSpace: "pre-wrap"}} justifyContent="left" item xs zeroMinWidth>
                                                     {data.solicitacao}
                                                 </Grid>
                                         </Paper>
