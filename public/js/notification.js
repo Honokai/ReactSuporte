@@ -6484,20 +6484,26 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 window.Echo.channel('comum').listen('.ChamadoRespondido', function (e) {
   if (Notification.permission == 'default') {
     Notification.requestPermission().then(function (permissao) {
-      permissao == 'granted' ? new Notification(e.data) : "";
-      console.log(permissao);
+      permissao == 'granted' ? new Notification(e.titulo, {
+        body: e.mensagem
+      }) : "";
     });
   } else if (Notification.permission == 'granted') {
-    new Notification(e.data);
+    new Notification(e.titulo, {
+      body: e.mensagem
+    });
   }
 }).listen('.t', function (e) {
   if (Notification.permission == 'default') {
     Notification.requestPermission().then(function (permissao) {
-      permissao == 'granted' ? new Notification(e.data) : "";
-      console.log(permissao);
+      permissao == 'granted' ? new Notification(e.titulo, {
+        body: e.mensagem
+      }) : "";
     });
   } else if (Notification.permission == 'granted') {
-    new Notification(e.data);
+    new Notification(e.titulo, {
+      body: e.mensagem
+    });
   }
 });
 })();

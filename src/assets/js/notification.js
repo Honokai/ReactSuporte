@@ -14,19 +14,19 @@ window.Echo = new Echo({
 window.Echo.channel('comum').listen('.ChamadoRespondido', (e) => {
     if(Notification.permission == 'default') {
         Notification.requestPermission().then(permissao => {
-            permissao == 'granted' ? new Notification(e.data) : ""
-            console.log(permissao)
+            permissao == 'granted' ? new Notification(e.titulo, {body: e.mensagem}) : ""
+            
         })
     } else if(Notification.permission == 'granted') {
-        new Notification(e.data)
+        new Notification(e.titulo, {body: e.mensagem})
     }
 }).listen('.t', (e) => {
     if(Notification.permission == 'default') {
         Notification.requestPermission().then(permissao => {
-            permissao == 'granted' ? new Notification(e.data) : ""
-            console.log(permissao)
+            permissao == 'granted' ? new Notification(e.titulo, {body: e.mensagem}) : ""
+
         })
     } else if(Notification.permission == 'granted') {
-        new Notification(e.data)
+        new Notification(e.titulo, {body: e.mensagem})
     }
 })
