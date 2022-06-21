@@ -27,8 +27,8 @@ const Login = () => {
                             <div>
                                 <TextField type="password" onChange={(event) => setPassword(event.target.value) } id="senha" label="Senha" variant="standard" />
                             </div>
-                            <div>
-                                <Link onClick={() => {
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <Link component="button" underline="none" onClick={() => {
                                     history.push("/registrar", {
                                         from: '/entrar',
                                         } as { from: string })

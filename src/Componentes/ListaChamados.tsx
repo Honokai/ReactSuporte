@@ -79,7 +79,6 @@ function ListaChamados() {
             <Box my={1}>
                 {paginas ? (
                     <Pagination count={paginas} color="primary" onChange={(event, page) => {
-                        console.log(page)
                         atualizarChamados(page)
                     }}/>
                 ) : ""}

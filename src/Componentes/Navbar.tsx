@@ -249,7 +249,7 @@ const Navbar = () => {
                     sx={{m: 1}}
                     control={<MaterialUISwitch defaultChecked />}
                     onChange={alterarTema}
-                    label="MUI switch"
+                    label=""
                 />
             </Grid>
         </Grid>
