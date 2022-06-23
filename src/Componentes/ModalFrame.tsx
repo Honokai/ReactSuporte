@@ -196,7 +196,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                     <Grid item xs={8}>
                         {
                             data && data?.editar ? (
-                                <Box sx={{margin: "0.8rem 0 0rem 0"}}>
+                                <Box sx={{padding: "0.8rem"}}>
                                     <TextField
                                         fullWidth
                                         id="filled-multiline-flexible"
@@ -213,8 +213,8 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                             {
                                 data?.respostas ? data.respostas.map(resposta => {
                                     return (
-                                        <Box sx={{margin: "0.8rem 0 0rem 0"}}>
-                                            <Paper sx={{p: "1rem"}}>
+                                        <Box sx={{padding: "0.8rem"}}>
+                                            <Paper elevation={2} sx={{p: "1rem"}}>
                                                 <Grid sx={{whiteSpace: "pre-wrap"}} item xs zeroMinWidth>
                                                     {resposta.conteudo}
                                                 </Grid>
@@ -228,7 +228,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                             }
                             {
                                 data?.solicitacao ? (
-                                    <>
+                                    <Box sx={{padding: "0.8rem"}}>
                                         <Paper sx={{p: "1rem"}}>
                                                 <Grid sx={{whiteSpace: "pre-wrap"}} justifyContent="left" item xs zeroMinWidth>
                                                     {data.solicitacao}
@@ -237,17 +237,19 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                         <Typography sx={{color: "secondary.darker"}} align="right">
                                             {data.solicitante} às {new Date(data.created_at).toLocaleString("br")}
                                         </Typography>
-                                    </>
+                                    </Box>
                                 ) : (
-                                    <TextField
-                                        fullWidth
-                                        id="filled-multiline-flexible"
-                                        label="Solicitação"
-                                        multiline
-                                        minRows={8}
-                                        value={solicitacao}
-                                        onChange={(event) => setSolicitacao(event.target.value)}
+                                    <Box sx={{padding: "0.8rem"}}>
+                                        <TextField
+                                            fullWidth
+                                            id="filled-multiline-flexible"
+                                            label="Solicitação"
+                                            multiline
+                                            minRows={8}
+                                            value={solicitacao}
+                                            onChange={(event) => setSolicitacao(event.target.value)}
                                         />
+                                    </Box>
                                 )
                             }
                         </Box>
