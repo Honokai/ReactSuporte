@@ -25,6 +25,7 @@ export interface chamadoProps {
     created_at:	Date
     updated_at: Date
     respostas: respostaProps[]
+    editar: boolean
 }
 
 interface respostaProps {

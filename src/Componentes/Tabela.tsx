@@ -14,6 +14,13 @@ interface TabelaProps {
 
 export default function Tabela(props: TabelaProps) {
   const {handleModal} = useModal()
+  
+  const statusColors = {
+    Aberto: "rgba(252, 109, 96, 0.74)",
+    Concluído: "rgba(84, 209, 84, 0.74)",
+    Reaberto: "rgba(146, 89, 232, 0.74)",
+    Andamento: "rgba(255, 250, 126, 0.74)",
+  }
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -30,7 +37,7 @@ export default function Tabela(props: TabelaProps) {
           {props.data.map((row) => (
             <TableRow
               key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 }, ':hover': {cursor: "pointer", background: "rgba(0,0,0,0.3)"} }}
+              sx={{ root: {background: statusColors.Aberto}  , '&:last-child td, &:last-child th': { border: 0 }, ':hover': {cursor: "pointer", background: "rgba(0,0,0,0.3)"} }}
               onClick={() => handleModal(true, row.id, props.data) }
             >
               <TableCell component="th" scope="row">

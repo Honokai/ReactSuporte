@@ -46,7 +46,6 @@ interface ModalFrameProps {
 
 function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProps) {
     const {aberto, handleModal, setModalData} = useModal()
-    const [allowed, setAllowed] = React.useState<boolean>(false)
     const { token, nome } = useAuth()
     const [solicitacao, setSolicitacao] = React.useState<string>('');
     const [localizacao, setLocalizacao] = React.useState<number|string>('');
@@ -84,13 +83,8 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
         setSetor('')
         setCategoria('')
         recursos()
-        podeAlterar()
+        console.log(data?.editar)
     }, [data])
-
-    function podeAlterar()
-    {
-        data?.solicitante === nome ? setAllowed(true) : setAllowed(false)
-    }
     
     const handleResposta = () => {
         api.post("/respostas", {
@@ -201,7 +195,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                     </Grid>
                     <Grid item xs={8}>
                         {
-                            data && allowed ? (
+                            data && data?.editar ? (
                                 <Box sx={{margin: "0.8rem 0 0rem 0"}}>
                                     <TextField
                                         fullWidth

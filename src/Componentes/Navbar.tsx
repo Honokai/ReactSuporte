@@ -16,9 +16,9 @@ import { useTema } from '../Hooks/useTema';
 import { useAuth } from '../Hooks/useAuth';
 import { CssBaseline, FormControlLabel, Grid, styled, Switch } from '@mui/material';
 
-const pages = ['Início', 'Item', 'Notícias','Ações'];
+const pages = ['Ações'];
 const settings = ['Perfil', 'Dashboard', 'Sair'];
-const actions = ['Novo chamado', 'Alterar tema']
+const actions = ['Novo chamado']
 // const ações = [{acao: 'Novo chamado'}];
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -66,7 +66,9 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
       borderRadius: 20 / 2,
     },
-  }));
+  
+  })
+);
 
 const Navbar = () => {
   const { handleModal } = useModal()
@@ -107,7 +109,7 @@ const Navbar = () => {
                     component="div"
                     sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
                 >
-                    SINT
+                  SUPORTE
                 </Typography>
 
                 <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -247,7 +249,7 @@ const Navbar = () => {
             <Grid item>
                 <FormControlLabel
                     sx={{m: 1}}
-                    control={<MaterialUISwitch defaultChecked />}
+                    control={<MaterialUISwitch checked={localStorage.getItem('tema') === "dark"} />}
                     onChange={alterarTema}
                     label=""
                 />
