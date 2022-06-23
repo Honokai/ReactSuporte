@@ -13,7 +13,7 @@ const style = {
     display: 'flex',
     flex: '1',
     flexDirection: "column",
-    overflow: "auto",
+    overflow: "hidden",
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -209,23 +209,23 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                 </Box>
                             ) : ""
                         }
-                        {
-                            data?.respostas ? data.respostas.map(resposta => {
-                                return (
-                                    <Box sx={{margin: "0.8rem 0 0rem 0"}}>
-                                        <Paper sx={{p: "1rem"}}>
-                                            <Grid sx={{whiteSpace: "pre-wrap"}} item xs zeroMinWidth>
-                                                {resposta.conteudo}
-                                            </Grid>
-                                        </Paper>
-                                        <Typography sx={{color: "secondary.darker"}} align="right">
-                                            {resposta.usuario.name} às {new Date(resposta.created_at).toLocaleString("br")}
-                                        </Typography>
-                                    </Box>
-                                )
-                            }) : ""
-                        }
-                        <Box sx={{margin: "0.8rem 0 0rem 0"}}>
+                        <Box sx={{maxHeight: '400px', overflow: "auto"}}>
+                            {
+                                data?.respostas ? data.respostas.map(resposta => {
+                                    return (
+                                        <Box sx={{margin: "0.8rem 0 0rem 0"}}>
+                                            <Paper sx={{p: "1rem"}}>
+                                                <Grid sx={{whiteSpace: "pre-wrap"}} item xs zeroMinWidth>
+                                                    {resposta.conteudo}
+                                                </Grid>
+                                            </Paper>
+                                            <Typography sx={{color: "secondary.darker"}} align="right">
+                                                {resposta.usuario.name} às {new Date(resposta.created_at).toLocaleString("br")}
+                                            </Typography>
+                                        </Box>
+                                    )
+                                }) : ""
+                            }
                             {
                                 data?.solicitacao ? (
                                     <>
