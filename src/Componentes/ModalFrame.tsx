@@ -48,11 +48,12 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
     const {aberto, handleModal, setModalData} = useModal()
     const { token, nome } = useAuth()
     const [solicitacao, setSolicitacao] = React.useState<string>('');
+    const [trocarCategoria, setTrocarCategoria ] = React.useState(false);
     const [localizacao, setLocalizacao] = React.useState<number|string>('');
     const [localizacoes, setLocalizacoes] = React.useState<{id: string, identificacao: string}[]|null>();
     const [setor, setSetor] = React.useState<number|string>('');
     const [categoria, setCategoria] = React.useState<number|string>('');
-    const [subcategorias, setSubCategorias] = React.useState<{id: string, nome: string, categoria_id: number}[]>();
+    const [subcategorias, setSubCategorias] = React.useState<{id: string, nome: string, categoria_id: number, subcategorianome: string}[]>();
     const [setores, setSetores] = React.useState<{id: string, nome: string}[]|null>();
     
     const headers = {Authorization: `Bearer ${token}`}
@@ -83,7 +84,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
         setSetor('')
         setCategoria('')
         recursos()
-        console.log(data?.editar)
+        data ? setTrocarCategoria(false) : setTrocarCategoria(true)
     }, [data])
     
     const handleResposta = () => {
@@ -97,6 +98,11 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                 atualizar()
             }
         })
+    }
+
+    const handleTransferenciaCategoria = (x = true) => {
+        setCategoria(data?.subcategoria.id ?? 0)
+        setTrocarCategoria(x)
     }
 
     const submitData = async () => {
@@ -179,17 +185,28 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                     size='small'
                                     labelId="categoria-select"
                                     id="categoria"
-                                    disabled={data?.subcategoria.id ? true : false }
-                                    value={data?.subcategoria.id ?? categoria}
+                                    disabled={!trocarCategoria}
+                                    value={!trocarCategoria && data?.subcategoria.id ? data.subcategoria.id : categoria}
                                     label="Categoria"
-                                    onChange={(event) => setCategoria(parseInt(event.target.value.toString()))}
+                                    onDoubleClick={(e) => {
+                                        handleTransferenciaCategoria()
+                                    }}
+                                    onChange={(event) => setCategoria(event.target.value)}
                                 >
+                                    <MenuItem value="" disabled={true}>Selecione a categoria</MenuItem>
                                     {subcategorias?.map(item => {
                                         return (
-                                            <MenuItem value={item.id}>{item.nome}</MenuItem>
+                                            <MenuItem value={item.id}>{item.subcategorianome}</MenuItem>
                                         )
                                     })}
                                 </Select>
+                                {trocarCategoria && data ? (
+                                    <FormControl fullWidth margin='dense' >
+                                        <Button onClick={() => {
+                                            data ? handleResposta() : submitData()
+                                            }} variant="contained">Trocar categoria</Button>
+                                    </FormControl>
+                                ) : ''}
                             </FormControl>
                         </Box>
                     </Grid>
@@ -258,7 +275,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                 <Box textAlign="center" sx={{margin: '0.5rem 0 0 0'}}>
                     <Button onClick={() => {
                         data ? handleResposta() : submitData()
-                        }} variant="contained">{data?.id ? 'Enviar' : 'Salvar'}</Button>
+                        }} variant="contained">{data?.id ? 'Enviar' : 'Criar solicitação'}</Button>
                 </Box>
             </Box>
         </Modal>
