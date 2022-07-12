@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Tooltip } from '@mui/material';
 import { chamadoProps } from './ListaChamados';
 import { useModal } from '../Hooks/useModal';
 import { ApiService } from '../Services/Api';
@@ -100,9 +100,14 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
         })
     }
 
-    const handleTransferenciaCategoria = (x = true) => {
+    const handleTransferenciaCategoria = async (x = true) => {
         setCategoria(data?.subcategoria.id ?? 0)
         setTrocarCategoria(x)
+
+        await api.get(`/subcategorias?exceto=${data?.subcategoria.id}`, {headers})
+        .then(response => {
+            setSubCategorias(response.data)
+        }).catch(error => console.log(error))
     }
 
     const submitData = async () => {
@@ -181,30 +186,33 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                             </FormControl>
                             <FormControl fullWidth margin='dense' >
                                 <InputLabel id="categoria-select">Categoria</InputLabel>
-                                <Select
-                                    size='small'
-                                    labelId="categoria-select"
-                                    id="categoria"
-                                    disabled={!trocarCategoria}
-                                    value={!trocarCategoria && data?.subcategoria.id ? data.subcategoria.id : categoria}
-                                    label="Categoria"
-                                    onDoubleClick={(e) => {
-                                        handleTransferenciaCategoria()
-                                    }}
-                                    onChange={(event) => setCategoria(event.target.value)}
-                                >
-                                    <MenuItem value="" disabled={true}>Selecione a categoria</MenuItem>
-                                    {subcategorias?.map(item => {
-                                        return (
-                                            <MenuItem value={item.id}>{item.subcategorianome}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
+                                <Tooltip title="Clique duas vezes para transferir" arrow>
+                                    <Select
+                                        size='small'
+                                        labelId="categoria-select"
+                                        id="categoria"
+                                        disabled={!trocarCategoria}
+                                        value={!trocarCategoria && data?.subcategoria.id ? data.subcategoria.id : categoria}
+                                        label="Categoria"
+                                        onDoubleClick={(e) => {
+                                            handleTransferenciaCategoria()
+                                        }}
+                                        onChange={(event) => setCategoria(event.target.value)}
+                                    >
+                                        <MenuItem value="" disabled={true}>Selecione a categoria</MenuItem>
+                                        {subcategorias?.map(item => {
+                                            return (
+                                                <MenuItem value={item.id}>{item.subcategorianome}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </Tooltip>
+                                
                                 {trocarCategoria && data ? (
                                     <FormControl fullWidth margin='dense' >
                                         <Button onClick={() => {
                                             data ? handleResposta() : submitData()
-                                            }} variant="contained">Trocar categoria</Button>
+                                            }} variant="contained">Transferir</Button>
                                     </FormControl>
                                 ) : ''}
                             </FormControl>
