@@ -20,7 +20,6 @@ export const TemaContextProvider = ({children}: ModalContextProps) => {
     const [tema, setTema] = useState<Theme>(localStorage.getItem("tema")  == "light" ? Tema.light : Tema.dark)
 
     function alterarTema() {
-        console.log("entrei")
         let value: "light"|"dark" = "light"
 
         if(localStorage.getItem("tema") == "light") {
@@ -30,7 +29,6 @@ export const TemaContextProvider = ({children}: ModalContextProps) => {
             localStorage.setItem("tema", "light")
             value = "light"
         }
-        console.log(value)
         setTema(Tema[value])
     }
 

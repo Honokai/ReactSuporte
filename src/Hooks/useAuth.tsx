@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { ApiService } from "../Services/Api";
+import { useLocation } from 'react-router-dom'
 
 interface AuthContextData {
     autenticado: boolean
@@ -27,6 +28,7 @@ interface RegistrationData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export function AuthContextProvider({ children }: AuthProviderProps) {
+    const location = useLocation()
     const [ autenticado, setAutenticado ] = useState<boolean>(false)
     const [ nome, setNome ] = useState<string>("")
     const [ token, setToken ] = useState<string>("")
@@ -37,6 +39,8 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
     useEffect(function () {
         api.get('/csrf-cookie')
+
+        handleTokenExpiration(localStorage.getItem('s_acc'))
     },[])
 
     async function handleLogin(email: string, password: string )
@@ -59,6 +63,32 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
                 }
         })
 
+    }
+
+    async function handleTokenExpiration(token: string|null)
+    {
+        if(token) {
+            await api.get("/user", {
+                headers : {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then( r => {
+                setToken(token)
+                setAutenticado(true)
+                setNome(r.data.nome)
+            }).catch(r => {
+                //está expirado
+                if (r.status == 401) {
+                    history.push('/entrar', {
+                        from: location.pathname
+                    })
+                }
+            })
+        } else {
+            history.push('/entrar', {
+                from: location.pathname
+            })
+        }
     }
 
     async function handleRegistration(name: string, email: string, password: string, confirmationPassword: string)
