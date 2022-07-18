@@ -14,7 +14,6 @@ interface TabelaProps {
 
 export default function Tabela(props: TabelaProps) {
   const {handleModal} = useModal()
-  
   const statusColors = {
     Aberto: "rgba(252, 109, 96, 0.74)",
     Concluído: "rgba(84, 209, 84, 0.74)",
@@ -44,7 +43,7 @@ export default function Tabela(props: TabelaProps) {
                 #{row.id.toString()}/{new Date(row.created_at).getFullYear()}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.status}
+                {row.status} {row.transferencias ? "Transferido" : ""}
               </TableCell>
               <TableCell component="th" scope="row">
                 {row.solicitante}

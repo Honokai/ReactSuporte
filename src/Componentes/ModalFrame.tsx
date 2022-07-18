@@ -101,7 +101,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
     }
 
     const handleTransferenciaCategoria = async (x = true) => {
-        setCategoria(data?.subcategoria.id ?? 0)
+        setCategoria('')
         setTrocarCategoria(x)
 
         await api.get(`/subcategorias?exceto=${data?.subcategoria.id}`, {headers})
@@ -125,6 +125,23 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                 alert(response.status)
             }
         }).catch(error => alert(error))
+    }
+
+    async function transferirChamado()
+    {
+        await api.post('/transferencia', {
+            chamado: data?.id,
+            categoriaDestino: categoria
+        }, {
+            headers,
+            withCredentials: true
+        }).then(r => {
+            if (r.status == 200) {
+                atualizar()
+            }
+        }).catch(e => {
+            console.log(e)
+        })
     }
 
     return (
@@ -211,8 +228,16 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                 {trocarCategoria && data ? (
                                     <FormControl fullWidth margin='dense' >
                                         <Button onClick={() => {
-                                            data ? handleResposta() : submitData()
-                                            }} variant="contained">Transferir</Button>
+                                            if(categoria) {
+                                                console.log(categoria)
+                                                transferirChamado()
+                                            } else {
+                                                alert('selecione uma categoria')
+                                            }
+                                        }}
+                                        variant="contained">
+                                            Transferir
+                                        </Button>
                                     </FormControl>
                                 ) : ''}
                             </FormControl>

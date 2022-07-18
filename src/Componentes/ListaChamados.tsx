@@ -22,6 +22,10 @@ export interface chamadoProps {
         id: number
         nome: string
     }
+    transferencias: {
+        id: number
+        setor_origem: string
+    }
     created_at:	Date
     updated_at: Date
     respostas: respostaProps[]
