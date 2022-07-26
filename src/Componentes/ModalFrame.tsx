@@ -48,6 +48,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
     const {aberto, handleModal, setModalData} = useModal()
     const { token, nome } = useAuth()
     const [solicitacao, setSolicitacao] = React.useState<string>('');
+    const [anexos, setAnexos] = React.useState<File[]>();
     const [trocarCategoria, setTrocarCategoria ] = React.useState(false);
     const [localizacao, setLocalizacao] = React.useState<number|string>('');
     const [localizacoes, setLocalizacoes] = React.useState<{id: string, identificacao: string}[]|null>();
@@ -57,7 +58,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
     const [setores, setSetores] = React.useState<{id: string, nome: string}[]|null>();
     
     const headers = {Authorization: `Bearer ${token}`}
-
+    const headerAnexo = {Authorization: `Bearer ${token}`, 'Content-Type': "multipart/form-data"}
     let api = ApiService
     
     async function recursos ()
@@ -88,10 +89,28 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
     }, [data])
     
     const handleResposta = () => {
-        api.post("/respostas", {
-            chamado: data?.id,
-            solicitacao
-        }, { headers }).then(response => {
+        var formData = new FormData()
+        if (anexos && anexos?.length > 0) {
+            console.log("entrei")
+            anexos.forEach(file => {
+                formData.append("anexo[]", file)
+            })
+            formData.set('_method', 'POST')
+            formData.set('chamado', data?.id.toString() ?? "")
+            formData.set('solicitacao', solicitacao)
+        }
+        console.log(formData.entries())
+        api.post("/respostas", anexos && anexos?.length > 0 ? 
+            {formData} :
+            {
+                chamado: data?.id,
+                solicitacao
+            } , { 
+            headers: anexos && anexos.length > 0 ? 
+                headerAnexo :
+                headers
+            }
+        ).then(response => {
             if (response.status === 201) {
                 handleModal(false) 
                 setModalData(null)
@@ -246,6 +265,7 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                     <Grid item xs={8}>
                         {
                             data && data?.editar ? (
+                                <>
                                 <Box sx={{padding: "0.8rem"}}>
                                     <TextField
                                         fullWidth
@@ -256,7 +276,30 @@ function ModalFrame({estaAberto, controleModal, data, atualizar}: ModalFrameProp
                                         value={solicitacao}
                                         onChange={(event) => setSolicitacao(event.target.value)}
                                     />
+                                    <Button variant='contained' component="label">
+                                            Anexar
+                                            <input type="file" multiple onChange={(e) => {
+                                                let arquivos: File[] = []
+                                                let name = ""
+
+                                                if (e.currentTarget.files) {
+                                                    Array.from(e.currentTarget.files).forEach(file => {
+                                                        name += ` ${file.name}`
+                                                        arquivos.push(file)
+                                                    })
+                                                }
+
+                                                setAnexos(arquivos)
+
+                                                if (e.currentTarget.parentElement?.nextElementSibling) {
+                                                    e.currentTarget.parentElement.nextElementSibling.innerHTML = name
+                                                }
+                                                
+                                            }} style={{"display": "none"}}/>
+                                    </Button>
+                                    <span></span>
                                 </Box>
+                                </>
                             ) : ""
                         }
                         <Box sx={{maxHeight: '400px', overflow: "auto"}}>
